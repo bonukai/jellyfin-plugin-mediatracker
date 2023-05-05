@@ -2,7 +2,7 @@
     {
         "guid": "c4772eae-799e-490d-abff-4de21f99c95e",
         "name": "MediaTracker",
-        "description": null,
+        "description": "MediaTracker scrobbler",
         "overview": "MediaTracker scrobbler",
         "owner": "bonukai",
         "category": "General",
