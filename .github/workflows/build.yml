@@ -14,5 +14,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  call:
+  build:
     uses: jellyfin/jellyfin-meta-plugins/.github/workflows/build.yaml@master
+    with:
+      dotnet-version: "6.0.*"
+      dotnet-target: "net6.0"
+  upload:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v3.0.2
+        with:
+          name: build-artifact
+      - name: Prepare GitHub Release assets
+        run: |-
+          for file in ./*; do
+            md5sum ${file#./} >> ${file%.*}.md5
+            sha256sum ${file#./} >> ${file%.*}.sha256
+          done
+          ls -l
+      
