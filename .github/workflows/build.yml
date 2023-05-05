@@ -60,7 +60,6 @@ jobs:
           
       - name: Commit manifest
         run: |
-          git pull
           git add ./manifest.json
           git commit -m "Update manifest.json"
-          git push --force origin main
+          git push --force
