@@ -10,3 +10,4 @@ category: "General"
 owner: "bonukai"
 artifacts:
 - "Jellyfin.Plugin.MediaTracker.dll"
+changelog:
