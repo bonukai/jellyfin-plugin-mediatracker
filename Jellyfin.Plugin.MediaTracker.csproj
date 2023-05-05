@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Jellyfin.Plugin.MediaTracker</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Jellyfin.Controller" Version="10.8.4" />
+    <PackageReference Include="Jellyfin.Model" Version="10.8.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Configuration\config.html" />
+    <None Remove="Configuration\config.js" />
+    <EmbeddedResource Include="Configuration\config.html" />
+    <EmbeddedResource Include="Configuration\config.js" />
+  </ItemGroup>
+
+</Project>

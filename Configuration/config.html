@@ -1,0 +1,60 @@
+<div
+    id="MediaTrackerConfigPage"
+    data-role="page"
+    class="page type-interior pluginConfigurationPage"
+    data-require="emby-input,emby-button,emby-select,emby-checkbox"
+    data-controller="__plugin/mediatrackerjs"
+>
+    <div data-role="content">
+        <div class="content-primary">
+            <form id="configForm">
+                <div class="selectContainer">
+                    <select
+                        is="emby-select"
+                        id="selectUser"
+                        name="selectUser"
+                        label="Configure MediaTracker for:"
+                    ></select>
+                </div>
+
+                <div class="inputContainer">
+                    <label class="inputLabel inputLabelUnfocused" for="apiToken"
+                        >API token</label
+                    >
+                    <input
+                        id="apiToken"
+                        name="apiToken"
+                        type="text"
+                        is="emby-input"
+                    />
+                    <div class="fieldDescription">MediaTracker API Token</div>
+                </div>
+                <div class="inputContainer">
+                    <label
+                        class="inputLabel inputLabelUnfocused"
+                        for="mediaTrackerUrl"
+                        >URL</label
+                    >
+                    <input
+                        id="mediaTrackerUrl"
+                        name="mediaTrackerUrl"
+                        type="text"
+                        is="emby-input"
+                    />
+                    <div class="fieldDescription">
+                        MediaTracker URL, for example http://localhost:7481
+                    </div>
+                </div>
+                <div>
+                    <button
+                        is="emby-button"
+                        type="submit"
+                        class="raised button-submit block emby-button"
+                    >
+                        <span>Save</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
