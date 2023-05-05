@@ -50,11 +50,16 @@ jobs:
       - name: Update manifest
         run: |
           jprm repo add --plugin-url ${{ steps.release.outputs.browser_download_url }} ./manifest.json ${{ steps.jprm.outputs.artifact }}
+      
+      - name: Setup GPG keys for signed commits
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
           
       - name: Commit manifest
         run: |
-          git config user.name jellyfin-bot
-          git config user.email team@jellyfin.org
           git pull
           git add ./manifest.json
           git commit -m "Update manifest.json"
