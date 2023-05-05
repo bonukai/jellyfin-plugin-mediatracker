@@ -6,15 +6,6 @@
         "overview": "MediaTracker scrobbler",
         "owner": "bonukai",
         "category": "General",
-        "versions": [
-            {
-                "version": "1.0.0.0",
-                "changelog": null,
-                "targetAbi": "10.8.9.0",
-                "sourceUrl": "https://github.com/bonukai/jellyfin-plugin-mediatracker/mediatracker/mediatracker_1.0.0.0.zip",
-                "checksum": "c21730bc46005dba8ad76db0c849a92a",
-                "timestamp": "2023-05-05T20:30:44Z"
-            }
-        ]
+        "versions": []
     }
 ]
