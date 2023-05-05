@@ -1,35 +1,61 @@
-name: '🏗️ Build Plugin'
+name: '🚀 Publish Plugin'
 
 on:
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - '**/*.md'
-  pull_request:
-    branches:
-      - master
-    paths-ignore:
-      - '**/*.md'
+  release:
+    types:
+      - released
   workflow_dispatch:
 
 jobs:
   build:
-    uses: jellyfin/jellyfin-meta-plugins/.github/workflows/build.yaml@master
-    with:
-      dotnet-version: "6.0.*"
-      dotnet-target: "net6.0"
-  upload:
     runs-on: ubuntu-latest
-    needs:
-      - build
     steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v3.0.2
+      - name: Checkout Repository
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
+        with:
+          ref: "master"
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@607fce577a46308457984d59e4954e075820f10a # tag=v3
+        with:
+          dotnet-version: 6.0.x
+          
+      - name: Setup jprm
+        run: |
+          pip install --user jprm
+
+      - name: Build Jellyfin Plugin
+        uses: oddstr13/jellyfin-plugin-repository-manager@4a2b165a3dc2cfc392db865a85f23c02e9f78c68 # v0.5.1
+        id: jprm
+        with:
+          dotnet-target: net6.0
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
         with:
           name: build-artifact
-      - name: Prepare GitHub Release assets
-        run: |-
-          ls -l          
+          retention-days: 30
+          if-no-files-found: error
+          path: ${{ steps.jprm.outputs.artifact }}
+
+      - name: Upload to Release
+        id: release
+        if: ${{ github.event_name == 'release' }}
+        uses: shogo82148/actions-upload-release-asset@b016af922a61601d647ff60226adadbe146b7651 # v1.6.4
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          overwrite: true
+          asset_path: ${{ steps.jprm.outputs.artifact }}
           
-      
+      - name: Update manifest
+        run: |
+          jprm repo add --plugin-url ${{ steps.release.outputs.browser_download_url }} ./manifest.json ${{ steps.jprm.outputs.artifact }}
+          
+      - name: Commit manifest
+        run: |
+          git config user.name jellyfin-bot
+          git config user.email team@jellyfin.org
+          git pull
+          git add ./manifest.json
+          git commit -m "Update manifest.json"
+          git push --force origin master
