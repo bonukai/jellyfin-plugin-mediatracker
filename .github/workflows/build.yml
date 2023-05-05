@@ -49,7 +49,7 @@ jobs:
           
       - name: Update manifest
         run: |
-          jprm repo add ./manifest.json ${{ steps.jprm.outputs.artifact }}
+          jprm repo add --url https://github.com/bonukai/jellyfin-plugin-mediatracker ./manifest.json ${{ steps.jprm.outputs.artifact }}
       
       - name: Setup GPG keys for signed commits
         uses: crazy-max/ghaction-import-gpg@v4
