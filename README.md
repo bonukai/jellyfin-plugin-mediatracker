@@ -3,7 +3,7 @@
 
 ## Requirements
 
-Minimum MediaTracker version: `0.1.0-beta.43`
+Minimum MediaTracker version: `0.1.0`
 
 ## Features
 
