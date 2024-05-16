@@ -1,18 +1,24 @@
 namespace Jellyfin.Plugin.MediaTracker;
 
-using MediaBrowser.Controller.Library;
-using MediaBrowser.Controller.Plugins;
-using MediaBrowser.Controller.Session;
-using MediaBrowser.Model.Entities;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Entities.TV;
+using MediaBrowser.Controller.Library;
+using MediaBrowser.Controller.Session;
+using MediaBrowser.Model.Entities;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
 using Jellyfin.Data.Entities;
 
 /// <summary>
 /// Class ServerEntryPoint
 /// </summary>
-public class ServerEntryPoint : IServerEntryPoint
+public class ServerEntryPoint : IHostedService, IDisposable
 {
 
     private const double minimumProgressToMarkAsSeen = 0.85;
@@ -34,17 +40,26 @@ public class ServerEntryPoint : IServerEntryPoint
         this.logger = loggerFactory.CreateLogger<ServerEntryPoint>();
         this.sessionManager = sessionManager;
         this.userDataManager = userDataManager;
-        this.httpClientFactory = httpClientFactory;        
+        this.httpClientFactory = httpClientFactory;
         Instance = this;
 
         progressDictionary = new PreviousActions();
     }
 
-    public Task RunAsync()
+    public Task StartAsync(CancellationToken cancellationToken)
     {
         sessionManager.PlaybackStart += PlaybackStart;
         sessionManager.PlaybackStopped += PlaybackStopped;
         sessionManager.PlaybackProgress += PlaybackProgress;
+
+        return Task.CompletedTask;
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        sessionManager.PlaybackStart -= PlaybackStart;
+        sessionManager.PlaybackStopped -= PlaybackStopped;
+        sessionManager.PlaybackProgress -= PlaybackProgress;
 
         return Task.CompletedTask;
     }
@@ -67,10 +82,7 @@ public class ServerEntryPoint : IServerEntryPoint
 
     public void Dispose()
     {
-        // Unbind events
-        sessionManager.PlaybackStart -= PlaybackStart;
-        sessionManager.PlaybackStopped -= PlaybackStopped;
-        sessionManager.PlaybackProgress -= PlaybackProgress;
+
     }
 
     private Int64? TryParseInt64(string? value)
@@ -80,9 +92,7 @@ public class ServerEntryPoint : IServerEntryPoint
             return null;
         }
 
-        Int64 res;
-
-        if (Int64.TryParse(value, out res))
+        if (Int64.TryParse(value, out Int64 res))
         {
             return res;
         }
@@ -133,9 +143,7 @@ public class ServerEntryPoint : IServerEntryPoint
 
         if (e.Item is Episode)
         {
-            var episode = e.Item as Episode;
-
-            if (episode == null)
+            if (e.Item is not Episode episode)
             {
                 logger.LogError("Missing episode object");
                 return;
