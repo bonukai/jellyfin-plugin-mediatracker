@@ -20,7 +20,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@607fce577a46308457984d59e4954e075820f10a # tag=v3
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 8.0.x
           
       - name: Setup jprm
         run: |
@@ -30,7 +30,7 @@ jobs:
         uses: oddstr13/jellyfin-plugin-repository-manager@4a2b165a3dc2cfc392db865a85f23c02e9f78c68 # v0.5.1
         id: jprm
         with:
-          dotnet-target: net6.0
+          dotnet-target: net8.0
 
       - name: Upload Artifact
         uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
