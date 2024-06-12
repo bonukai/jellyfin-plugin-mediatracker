@@ -192,30 +192,6 @@ public class ServerEntryPoint : IHostedService, IDisposable
                     continue;
                 }
 
-                logger.LogInformation("Updating progress for episode of {0} S{1:00}E{2:00} - {3:0.00}% - {4} for user {5}",
-                    episode.SeriesName,
-                    seasonNumber,
-                    episodeNumber,
-                    progress * 100,
-                    action,
-                    user.Username);
-
-                await UpdateProgress(user, new
-                {
-                    mediaType = "tv",
-                    id = new
-                    {
-                        imdbId = imdbId,
-                        tmdbId = tmdbId
-                    },
-                    seasonNumber = seasonNumber,
-                    episodeNumber = episodeNumber,
-                    action = action,
-                    progress = progress,
-                    duration = durationInMilliseconds,
-                    device = deviceName
-                });
-
                 if (progress > minimumProgressToMarkAsSeen && progressDictionary.CanMarkAsSeen(user, episode))
                 {
                     logger.LogInformation("Adding episode of {0} S{1:00}E{2:00} to seen history for user {3}",
@@ -235,6 +211,32 @@ public class ServerEntryPoint : IHostedService, IDisposable
                         seasonNumber = seasonNumber,
                         episodeNumber = episodeNumber,
                         duration = durationInMilliseconds,
+                    });
+                }
+                else
+                {
+                    logger.LogInformation("Updating progress for episode of {0} S{1:00}E{2:00} - {3:0.00}% - {4} for user {5}",
+                        episode.SeriesName,
+                        seasonNumber,
+                        episodeNumber,
+                        progress * 100,
+                        action,
+                        user.Username);
+    
+                    await UpdateProgress(user, new
+                    {
+                        mediaType = "tv",
+                        id = new
+                        {
+                            imdbId = imdbId,
+                            tmdbId = tmdbId
+                        },
+                        seasonNumber = seasonNumber,
+                        episodeNumber = episodeNumber,
+                        action = action,
+                        progress = progress,
+                        duration = durationInMilliseconds,
+                        device = deviceName
                     });
                 }
             }
