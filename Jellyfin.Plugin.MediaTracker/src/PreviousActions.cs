@@ -56,8 +56,8 @@ public class PreviousActions
 {
     public PreviousActions()
     {
-        progressDictionary = new Dictionary<Tuple<Guid, Guid>, PreviousAction>();
-        markedAsSeenHistory = new Dictionary<Tuple<Guid, Guid>, DateTime>();
+        progressDictionary = [];
+        markedAsSeenHistory = [];
     }
 
     public void Cleanup()
@@ -71,18 +71,15 @@ public class PreviousActions
     {
         var id = Tuple.Create(user.Id, video.Id);
 
-        PreviousAction? res;
-
-        if (progressDictionary.TryGetValue(id, out res))
+        if (progressDictionary.TryGetValue(id, out PreviousAction? value))
         {
-            if (res.ShouldSkip(action, progress))
+            if (value.ShouldSkip(action, progress))
             {
                 return true;
             }
         }
-
-        progressDictionary.Remove(id);
-        progressDictionary.Add(id, new PreviousAction(action, progress));
+        
+        progressDictionary[id] = new PreviousAction(action, progress);
 
         return false;
     }
@@ -91,9 +88,7 @@ public class PreviousActions
     {
         var id = Tuple.Create(user.Id, video.Id);
 
-        DateTime res;
-
-        if (markedAsSeenHistory.TryGetValue(id, out res))
+        if (markedAsSeenHistory.ContainsKey(id))
         {
             return false;
         }
