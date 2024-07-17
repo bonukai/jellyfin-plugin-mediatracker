@@ -102,7 +102,7 @@ public class ServerEntryPoint : IHostedService, IDisposable
 
     private async void OnPlaybackChanged(PlaybackProgressEventArgs e, string action)
     {
-        if (e.Users == null || !e.Users.Any())
+        if (e.Users == null || e.Users.Count == 0)
         {
             logger.LogError("Missing users");
             return;
@@ -205,13 +205,13 @@ public class ServerEntryPoint : IHostedService, IDisposable
                     mediaType = "tv",
                     id = new
                     {
-                        imdbId = imdbId,
-                        tmdbId = tmdbId
+                        imdbId,
+                        tmdbId
                     },
-                    seasonNumber = seasonNumber,
-                    episodeNumber = episodeNumber,
-                    action = action,
-                    progress = progress,
+                    seasonNumber,
+                    episodeNumber,
+                    action,
+                    progress,
                     duration = durationInMilliseconds,
                     device = deviceName
                 });
@@ -229,11 +229,11 @@ public class ServerEntryPoint : IHostedService, IDisposable
                         mediaType = "tv",
                         id = new
                         {
-                            imdbId = imdbId,
-                            tmdbId = tmdbId
+                            imdbId,
+                            tmdbId
                         },
-                        seasonNumber = seasonNumber,
-                        episodeNumber = episodeNumber,
+                        seasonNumber,
+                        episodeNumber,
                         duration = durationInMilliseconds,
                     });
                 }
@@ -276,11 +276,11 @@ public class ServerEntryPoint : IHostedService, IDisposable
                     mediaType = "movie",
                     id = new
                     {
-                        imdbId = imdbId,
-                        tmdbId = tmdbId
+                        imdbId,
+                        tmdbId
                     },
-                    action = action,
-                    progress = progress,
+                    action,
+                    progress,
                     duration = durationInMilliseconds,
                     device = deviceName
                 });
@@ -296,8 +296,8 @@ public class ServerEntryPoint : IHostedService, IDisposable
                         mediaType = "movie",
                         id = new
                         {
-                            imdbId = imdbId,
-                            tmdbId = tmdbId
+                            imdbId,
+                            tmdbId
                         },
                         duration = durationInMilliseconds,
                     });
@@ -339,7 +339,6 @@ public class ServerEntryPoint : IHostedService, IDisposable
         var content = new StringContent(payloadJson, System.Text.Encoding.UTF8, "application/json");
 
         var uri = new Uri(new Uri(mediaTrackerUrl), path + "?token=" + apiToken);
-        var httpClient = httpClientFactory.CreateClient();
 
         try
         {
