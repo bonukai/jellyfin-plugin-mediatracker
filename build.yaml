@@ -9,6 +9,6 @@ description: "MediaTracker scrobbler"
 category: "General"
 owner: "bonukai"
 artifacts:
-- "Jellyfin.Plugin.MediaTracker.dll"
-changelog:
-- "refactored ShouldSkipAction"
+  - "Jellyfin.Plugin.MediaTracker.dll"
+changelog: |-
+  - "refactored ShouldSkipAction"
