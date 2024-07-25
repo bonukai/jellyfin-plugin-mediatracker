@@ -9,11 +9,11 @@
         "versions": [
             {
                 "version": "2.0.0.1",
-                "changelog": "refactored ShouldSkipAction",
+                "changelog": "- \"refactored ShouldSkipAction\"",
                 "targetAbi": "10.9.1.0",
                 "sourceUrl": "https://github.com/bonukai/jellyfin-plugin-mediatracker/releases/download/v2.0.0.1/mediatracker_2.0.0.1.zip",
-                "checksum": "bc50cbee77492e26cc326d2cf5cb1406",
-                "timestamp": "2024-07-17T16:10:49Z"
+                "checksum": "8eb5d247e5f17551cda3700697d7282d",
+                "timestamp": "2024-07-25T11:39:02Z"
             },
             {
                 "version": "2.0.0.0",
