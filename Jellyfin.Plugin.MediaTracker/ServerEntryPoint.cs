@@ -139,8 +139,6 @@ public class ServerEntryPoint : IHostedService, IDisposable
         var progress = (float)positionTicks / runTimeTicks;
         var durationInMilliseconds = (runTimeTicks / TimeSpan.TicksPerSecond) * 1000;
 
-        progressDictionary.Cleanup();
-
         if (e.Item is Episode)
         {
             if (e.Item is not Episode episode)

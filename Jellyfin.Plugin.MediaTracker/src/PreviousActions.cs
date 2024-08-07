@@ -60,13 +60,6 @@ public class PreviousActions
         markedAsSeenHistory = [];
     }
 
-    public void Cleanup()
-    {
-        progressDictionary = progressDictionary.Where(item => item.Value.IsWithinTimeLimit()).ToDictionary(p => p.Key, p => p.Value);
-
-        markedAsSeenHistory = markedAsSeenHistory.Where(item => DateTime.Now.Subtract(item.Value).TotalHours < 12).ToDictionary(p => p.Key, p => p.Value);
-    }
-
     public bool ShouldSkipAction(User user, Video video, float progress, string action)
     {
         var id = Tuple.Create(user.Id, video.Id);
@@ -88,12 +81,14 @@ public class PreviousActions
     {
         var id = Tuple.Create(user.Id, video.Id);
 
-        if (markedAsSeenHistory.ContainsKey(id))
+        if (markedAsSeenHistory.TryGetValue(id, out DateTime value))
         {
-            return false;
+            markedAsSeenHistory[id] = DateTime.Now;
+
+            return (DateTime.Now.Subtract(value).TotalHours >= 12);
         }
 
-        markedAsSeenHistory.Add(id, DateTime.Now);
+        markedAsSeenHistory[id] = DateTime.Now;
 
         return true;
     }
